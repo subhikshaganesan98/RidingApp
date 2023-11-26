@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">RidingApp</string>
+    <string name="login">Login</string>
+    <string name="enter_your_email">Enter your Email</string>
+    <string name="enter_your_password">Enter your Password</string>
+    <string name="register">Register</string>
+    <string name="click_to_login">Click to Login</string>
+    <string name="click_to_register">Click to Register</string>
+    <string name="logout">Logout</string>
 </resources>
