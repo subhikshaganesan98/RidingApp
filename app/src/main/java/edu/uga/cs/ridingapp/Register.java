@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -44,10 +45,8 @@ public class Register extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        // taking FirebaseAuth instance
         mAuth = FirebaseAuth.getInstance();
 
-        // initialising all views through id defined above
         editTextEmail = findViewById(R.id.email);
         editTextPassword = findViewById(R.id.password);
         buttonReg = findViewById(R.id.btn_register);
@@ -63,7 +62,6 @@ public class Register extends AppCompatActivity {
             }
         });
 
-        // Set on Click Listener on Registration button
         buttonReg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)
@@ -73,28 +71,25 @@ public class Register extends AppCompatActivity {
         });
     }
 
-    private void registerNewUser()
-    {
-
-        // show the visibility of progress bar to show loading
+    private void registerNewUser() {
         progressbar.setVisibility(View.VISIBLE);
 
-        // Take the value of two edit texts in Strings
-        String email,password;
+        String email, password;
         email = String.valueOf(editTextEmail.getText());
         password = String.valueOf(editTextPassword.getText());
 
-        // Validations for input email and password
-        if (TextUtils.isEmpty(email)) {
-            Toast.makeText(Register.this, "Please enter email!!", Toast.LENGTH_LONG).show();
-            return;
-        }
-        if (TextUtils.isEmpty(password)) {
-            Toast.makeText(Register.this, "Please enter password!!", Toast.LENGTH_LONG).show();
+        if (TextUtils.isEmpty(email) || !isValidEmail(email)) {
+            progressbar.setVisibility(View.GONE);
+            Toast.makeText(Register.this, "Please enter a valid email address.", Toast.LENGTH_LONG).show();
             return;
         }
 
-        // create new user or register new user
+        if (TextUtils.isEmpty(password)) {
+            progressbar.setVisibility(View.GONE);
+            Toast.makeText(Register.this, "Please enter your password.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -106,10 +101,13 @@ public class Register extends AppCompatActivity {
                             startActivity(intent);
                             finish();
                         } else {
-                            // If sign in fails, display a message to the user.
-                            Toast.makeText(Register.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Register.this, "Authentication failed. Please try a different email or check your password.", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
+    }
+
+    private boolean isValidEmail(CharSequence target) {
+        return (!TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches());
     }
 }

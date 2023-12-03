@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -19,13 +21,15 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.security.SecureRandom;
+
 public class Login extends AppCompatActivity {
     private TextInputEditText editTextEmail, editTextPassword;
     private Button buttonLogin;
     private ProgressBar progressbar;
     private FirebaseAuth mAuth;
 
-    private TextView textView;
+    private TextView textView, reset;
 
     @Override
     public void onStart() {
@@ -44,15 +48,14 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // taking FirebaseAuth instance
         mAuth = FirebaseAuth.getInstance();
 
-        // initialising all views through id defined above
         editTextEmail = findViewById(R.id.email);
         editTextPassword = findViewById(R.id.password);
         buttonLogin = findViewById(R.id.btn_login);
         progressbar = findViewById(R.id.progressBar);
         textView = findViewById(R.id.registerNow);
+        reset = findViewById(R.id.resetPassword);
 
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,31 +66,58 @@ public class Login extends AppCompatActivity {
             }
         });
 
+        reset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                resetUserPassword();
+            }
+        });
+
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                registerNewUser();
+                loginUser();
             }
         });
     }
 
-    private void registerNewUser() {
+    private void resetUserPassword() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        // show the visibility of progress bar to show loading
+        if (user != null) {
+            FirebaseAuth.getInstance().sendPasswordResetEmail(user.getEmail())
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(Login.this, "Password reset email sent. Check your email.", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(Login.this, "Failed to send password reset email.", Toast.LENGTH_SHORT).show();
+                                // Log the error for further investigation
+                                Log.e("PasswordReset", "Failed to send password reset email", task.getException());
+                            }
+                        }
+                    });
+        }
+    }
+
+
+    private void loginUser() {
         progressbar.setVisibility(View.VISIBLE);
 
-        // Take the value of two edit texts in Strings
         String email, password;
         email = String.valueOf(editTextEmail.getText());
         password = String.valueOf(editTextPassword.getText());
 
-        // Validations for input email and password
-        if (TextUtils.isEmpty(email)) {
-            Toast.makeText(Login.this, "Please enter email!!", Toast.LENGTH_LONG).show();
+        if (TextUtils.isEmpty(email) || !isValidEmail(email)) {
+            progressbar.setVisibility(View.GONE);
+            Toast.makeText(Login.this, "Please enter a valid email address.", Toast.LENGTH_LONG).show();
             return;
         }
+
         if (TextUtils.isEmpty(password)) {
-            Toast.makeText(Login.this, "Please enter password!!", Toast.LENGTH_LONG).show();
+            progressbar.setVisibility(View.GONE);
+            Toast.makeText(Login.this, "Please enter your password.", Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -102,9 +132,13 @@ public class Login extends AppCompatActivity {
                             startActivity(intent);
                             finish();
                         } else {
-                            Toast.makeText(Login.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Login.this, "Authentication failed. Please check your credentials.", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
+    }
+
+    private boolean isValidEmail(CharSequence target) {
+        return (!TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches());
     }
 }

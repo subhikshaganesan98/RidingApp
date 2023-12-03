@@ -15,6 +15,18 @@
         android:theme="@style/Theme.RidingApp"
         tools:targetApi="31">
         <activity
+            android:name=".RideOffers"
+            android:exported="false" />
+        <activity
+            android:name=".UserPointsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".DriverActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RiderActivity"
+            android:exported="false" />
+        <activity
             android:name=".Register"
             android:exported="false" />
         <activity
@@ -28,8 +40,7 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true" />
     </application>
 
 </manifest>

@@ -7,4 +7,12 @@
     <string name="click_to_login">Click to Login</string>
     <string name="click_to_register">Click to Register</string>
     <string name="logout">Logout</string>
+    <string name="click_to_reset_password">Click to Reset Password</string>
+    <string name="click_to_reset">Click to Reset</string>
+    <string name="reset_passowd">Reset Passowd</string>
+    <string name="enter_new_password">Enter New Password</string>
+    <string name="enter_old_password">Enter Old Password</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
 </resources>
