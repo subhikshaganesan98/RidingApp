@@ -60,12 +60,6 @@
                     android:text="I am driver"
                     android:textAllCaps="true" />
 
-                <Button
-                    android:id="@+id/button4"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="User ride points"
-                    android:textAllCaps="true" />
             </LinearLayout>
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

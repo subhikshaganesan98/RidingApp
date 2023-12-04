@@ -9,6 +9,12 @@
             app:showAsAction="ifRoom|withText" />
 
         <item
+            android:id="@+id/userPoints"
+            android:orderInCategory="2"
+            android:title="User Ride Points"
+            app:showAsAction="ifRoom|withText" />
+
+        <item
             android:id="@+id/changePassword"
             android:orderInCategory="2"
             android:title="Change Password"
