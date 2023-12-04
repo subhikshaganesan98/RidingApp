@@ -1,20 +1,30 @@
 package edu.uga.cs.ridingapp;
 
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.Firebase;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -64,12 +74,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        if(user == null){
+        if (user == null) {
             Intent intent = new Intent(getApplicationContext(), Login.class);
             startActivity(intent);
             finish();
-        }
-        else{
+        } else {
             // Set "Signed in as:" as a default value
             MenuItem accountMenuItem = nvDrawer.getMenu().findItem(R.id.account);
             if (accountMenuItem != null) {
@@ -77,39 +86,109 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
     public void selectDrawerItem(MenuItem menuItem) {
         // Create an intent to launch activities based on nav item clicked
         Intent intent;
-         if (menuItem.getItemId() == R.id.changePassword) {
-            intent = new Intent(this, RideOffers.class);
+        if (menuItem.getItemId() == R.id.changePassword) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            View dialogView = getLayoutInflater().inflate(R.layout.dialog_change_password, null);
+            EditText oPassword = dialogView.findViewById(R.id.passwordEt);
+            EditText nPassword = dialogView.findViewById(R.id.cPasswordEt);
+            builder.setView(dialogView);
+            AlertDialog dialog = builder.create();
+            dialogView.findViewById(R.id.updatePasswordBtn).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String currentPassword = oPassword.getText().toString().trim();
+                    String newPassword = nPassword.getText().toString().trim();
+                    //validate data
+                    if (TextUtils.isEmpty(currentPassword)) {
+                        Toast.makeText(MainActivity.this, "Enter your current password.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (newPassword.length() < 5) {
+                        Toast.makeText(MainActivity.this, "Password length must be minimum 5 characters", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    updatePassword(currentPassword, newPassword);
+                }
+            });
+            dialogView.findViewById(R.id.cancelCPassword).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                }
+            });
+            if (dialog.getWindow() != null) {
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+            }
+            dialog.show();
+
+        } else if (menuItem.getItemId() == R.id.deleteAcc) {
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            if (user != null) {
+                user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(MainActivity.this, "Account removed successfully.", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(MainActivity.this, Login.class);
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(MainActivity.this, "Failed to remove account.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        } else if (menuItem.getItemId() == R.id.logoutUser) {
+            FirebaseAuth.getInstance().signOut();
+            intent = new Intent(getApplicationContext(), Login.class);
             startActivity(intent);
-         }
-         else if (menuItem.getItemId() == R.id.deleteAcc) {
-             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-             if (user != null) {
-                 user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                     @Override
-                     public void onComplete(@NonNull Task<Void> task) {
-                         if (task.isSuccessful()) {
-                             Toast.makeText(MainActivity.this, "Account removed successfully.", Toast.LENGTH_SHORT).show();
-                             Intent intent = new Intent(MainActivity.this, Login.class);
-                             startActivity(intent);
-                         }
-                         else {
-                             Toast.makeText(MainActivity.this, "Failed to remove account.", Toast.LENGTH_SHORT).show();
-                         }
-                     }
-                 });
-             }
-         }
-         else if (menuItem.getItemId() == R.id.logoutUser) {
-             FirebaseAuth.getInstance().signOut();
-             intent = new Intent(getApplicationContext(), Login.class);
-             startActivity(intent);
-             finish();
-         }
+            finish();
+        }
         // Close the navigation drawer
         mDrawer.closeDrawers();
+    }
+
+    private void updatePassword(String oldPassword, String newPassword) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_change_password, null);
+        builder.setView(dialogView);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        AuthCredential authCredential = EmailAuthProvider.getCredential(user.getEmail(), oldPassword);
+        user.reauthenticate(authCredential)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        user.updatePassword(newPassword)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        //password updated
+                                        dialog.dismiss();
+                                        Toast.makeText(MainActivity.this, "Password Changed", Toast.LENGTH_SHORT).show();
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        //failed updating password
+                                        dialog.dismiss();
+                                        Toast.makeText(MainActivity.this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        dialog.dismiss();
+                        Toast.makeText(MainActivity.this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     private ActionBarDrawerToggle setupDrawerToggle() {
