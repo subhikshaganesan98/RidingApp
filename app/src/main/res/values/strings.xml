@@ -13,6 +13,6 @@
     <string name="enter_new_password">Enter New Password</string>
     <string name="enter_old_password">Enter Old Password</string>
     <string name="reset_password">Reset Password</string>
-    <string name="open">Open</string>
-    <string name="close">Close</string>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
 </resources>
