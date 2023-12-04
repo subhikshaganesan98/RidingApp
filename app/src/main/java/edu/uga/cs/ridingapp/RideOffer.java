@@ -25,12 +25,15 @@ public class RideOffer {
     private String pickup;
     private String destination;
 
+    private boolean accepted;
+
     public RideOffer() {
         this.driverName = null;
         this.time = null;
         this.date = null;
         this.pickup = null;
         this.destination = null;
+        this.accepted = false;
     }
 
     public RideOffer(String driverName, String time, String date, String pickup, String destination) {
@@ -39,6 +42,7 @@ public class RideOffer {
         this.date = date;
         this.pickup = pickup;
         this.destination = destination;
+
     }
 
     // Getter methods
@@ -66,6 +70,10 @@ public class RideOffer {
         return destination;
     }
 
+    public boolean getAccepted() {
+        return this.accepted;
+    }
+
     // Setter methods
     public void setKey(String key) {
         this.key = key;
@@ -89,6 +97,10 @@ public class RideOffer {
 
     public void setDestination(String destination) {
         this.destination = destination;
+    }
+
+    public void setAccepted(boolean accepted){
+        this.accepted = accepted;
     }
 }
 

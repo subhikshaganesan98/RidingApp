@@ -10,6 +10,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -25,6 +27,9 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private ActionBarDrawerToggle drawerToggle;
     private NavigationView nvDrawer;
+
+    private Button riderButton;
+    private Button drvierButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +81,36 @@ public class MainActivity extends AppCompatActivity {
                 accountMenuItem.setTitle("Signed in as: " + user.getEmail());
             }
         }
+
+        // "I am rider" Button
+        riderButton = findViewById(R.id.button2);
+        riderButton.setOnClickListener(new RidderButtonClickListener());
+
+        // "I am driver" Button
+        riderButton = findViewById(R.id.button3);
+        riderButton.setOnClickListener(new DriverButtonClickListener());
     }
+
+    private class RidderButtonClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            // start the user registration activity
+            Intent intent = new Intent(view.getContext(), RiderActivity.class);
+            view.getContext().startActivity(intent);
+        }
+    }
+
+    private class DriverButtonClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            // start the user registration activity
+            Intent intent = new Intent(view.getContext(), DriverActivity.class);
+            view.getContext().startActivity(intent);
+        }
+    }
+
+
+
     public void selectDrawerItem(MenuItem menuItem) {
         // Create an intent to launch activities based on nav item clicked
         Intent intent;

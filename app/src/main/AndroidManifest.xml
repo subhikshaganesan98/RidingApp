@@ -15,6 +15,9 @@
         android:theme="@style/Theme.RidingApp"
         tools:targetApi="31">
         <activity
+            android:name=".NewRideRequest"
+            android:exported="false" />
+        <activity
             android:name=".NewRideOffer"
             android:exported="false" />
         <activity
