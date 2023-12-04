@@ -85,19 +85,17 @@ public class Login extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         if (user != null) {
-            FirebaseAuth.getInstance().sendPasswordResetEmail(user.getEmail())
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                Toast.makeText(Login.this, "Password reset email sent. Check your email.", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(Login.this, "Failed to send password reset email.", Toast.LENGTH_SHORT).show();
-                                // Log the error for further investigation
-                                Log.e("PasswordReset", "Failed to send password reset email", task.getException());
-                            }
-                        }
-                    });
+            FirebaseAuth.getInstance().sendPasswordResetEmail(user.getEmail()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(Login.this, "Password reset email sent. Check your email.", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        Toast.makeText(Login.this, "Failed to send password reset email.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
         }
     }
 
@@ -121,21 +119,21 @@ public class Login extends AppCompatActivity {
             return;
         }
 
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        progressbar.setVisibility(View.GONE);
-                        if (task.isSuccessful()) {
-                            Toast.makeText(Login.this, "Login Successful.", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                            startActivity(intent);
-                            finish();
-                        } else {
-                            Toast.makeText(Login.this, "Authentication failed. Please check your credentials.", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                progressbar.setVisibility(View.GONE);
+                if (task.isSuccessful()) {
+                    Toast.makeText(Login.this, "Login Successful.", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+                else {
+                    Toast.makeText(Login.this, "Authentication failed. Please check your credentials.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     private boolean isValidEmail(CharSequence target) {
