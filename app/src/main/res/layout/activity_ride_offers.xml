@@ -50,10 +50,10 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/origin_textView"
+                android:id="@+id/pickup_textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Start Location"
+                android:text="Pickup"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 

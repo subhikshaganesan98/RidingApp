@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,7 +33,7 @@ public class NewRideOffer extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_ride_offer);
 
-        driverName = findViewById(R.id.editText1);
+        driverName = findViewById(R.id.rideOfferDialog_editText1);
         date = findViewById(R.id.editText2);
         time = findViewById(R.id.editText3);
         pickup = findViewById(R.id.editText4);

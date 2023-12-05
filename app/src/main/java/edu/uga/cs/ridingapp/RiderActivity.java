@@ -30,7 +30,7 @@ public class RiderActivity extends AppCompatActivity {
     private class ViewRideOffersButtonClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-            Intent intent = new Intent(view.getContext(), NewRideRequest.class);
+            Intent intent = new Intent(view.getContext(), ReviewRideOffersActivity.class);
             view.getContext().startActivity(intent);
         }
     }

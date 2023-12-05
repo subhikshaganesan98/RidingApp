@@ -23,7 +23,7 @@ public class RideOffer {
     private String time;
     private String date;
     private String pickup;
-    private String destination;
+    private String dropoff;
 
     private boolean accepted;
 
@@ -32,16 +32,16 @@ public class RideOffer {
         this.time = null;
         this.date = null;
         this.pickup = null;
-        this.destination = null;
+        this.dropoff = null;
         this.accepted = false;
     }
 
-    public RideOffer(String driverName, String time, String date, String pickup, String destination) {
+    public RideOffer(String driverName, String time, String date, String pickup, String dropoff) {
         this.driverName = driverName;
         this.time = time;
         this.date = date;
         this.pickup = pickup;
-        this.destination = destination;
+        this.dropoff = dropoff;
 
     }
 
@@ -66,8 +66,8 @@ public class RideOffer {
         return pickup;
     }
 
-    public String getDestination() {
-        return destination;
+    public String getDropoff() {
+        return dropoff;
     }
 
     public boolean getAccepted() {
@@ -95,8 +95,8 @@ public class RideOffer {
         this.pickup = pickup;
     }
 
-    public void setDestination(String destination) {
-        this.destination = destination;
+    public void setDropoff(String dropoff) {
+        this.dropoff = dropoff;
     }
 
     public void setAccepted(boolean accepted){
