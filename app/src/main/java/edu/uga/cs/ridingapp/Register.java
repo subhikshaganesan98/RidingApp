@@ -19,13 +19,16 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class Register extends AppCompatActivity {
-    private TextInputEditText editTextEmail, editTextPassword;
+    private TextInputEditText editTextEmail, editTextPassword, editTextUsername, editTextName;
     private Button buttonReg;
     private ProgressBar progressbar;
     private FirebaseAuth mAuth;
-
+    private FirebaseDatabase database;
+    private DatabaseReference reference;
     private TextView textView;
 
     @Override
@@ -52,6 +55,8 @@ public class Register extends AppCompatActivity {
         buttonReg = findViewById(R.id.btn_register);
         progressbar = findViewById(R.id.progressBar);
         textView = findViewById(R.id.loginNow);
+        editTextUsername = findViewById(R.id.username);
+        editTextName = findViewById(R.id.name);
 
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,10 +78,14 @@ public class Register extends AppCompatActivity {
 
     private void registerNewUser() {
         progressbar.setVisibility(View.VISIBLE);
+        database = FirebaseDatabase.getInstance();
+        reference = database.getReference("users");
 
-        String email, password;
+        String fullName, username, email, password;
         email = String.valueOf(editTextEmail.getText());
         password = String.valueOf(editTextPassword.getText());
+        username = String.valueOf(editTextUsername.getText());
+        fullName = String.valueOf(editTextName.getText());
 
         if (TextUtils.isEmpty(email) || !isValidEmail(email)) {
             progressbar.setVisibility(View.GONE);
@@ -89,6 +98,9 @@ public class Register extends AppCompatActivity {
             Toast.makeText(Register.this, "Please enter your password.", Toast.LENGTH_LONG).show();
             return;
         }
+
+        HelperClass helperClass = new HelperClass(fullName, username, email, password);
+        reference.child(fullName).setValue(helperClass);
 
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -105,6 +117,7 @@ public class Register extends AppCompatActivity {
                         }
                     }
                 });
+
     }
 
     private boolean isValidEmail(CharSequence target) {
