@@ -2,7 +2,7 @@ package edu.uga.cs.ridingapp;
 
 public class HelperClass {
 
-    String fullName, email, username, password;
+    String fullName, email, username, password, userPoints;
 
     public String getFullName() {
         return fullName;
@@ -36,11 +36,16 @@ public class HelperClass {
         this.password = password;
     }
 
-    public HelperClass(String fullName, String email, String username, String password) {
+    public String getUserPoints() { return userPoints; }
+
+    public void setUserPoints(String userPoints) { this.userPoints = userPoints; }
+
+    public HelperClass(String fullName, String email, String username, String password, String userPoints) {
         this.fullName = fullName;
         this.email = email;
         this.username = username;
         this.password = password;
+        this.userPoints = userPoints;
     }
 
     public HelperClass() {

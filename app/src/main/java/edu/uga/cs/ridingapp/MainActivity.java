@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,6 +32,12 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth auth;
@@ -39,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private ActionBarDrawerToggle drawerToggle;
     private NavigationView nvDrawer;
-
+    private FirebaseDatabase database;
     private Button riderButton;
     private Button drvierButton;
 
@@ -48,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        database = FirebaseDatabase.getInstance();
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
 
@@ -168,20 +176,11 @@ public class MainActivity extends AppCompatActivity {
         else if (menuItem.getItemId() == R.id.deleteAcc) {
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             if (user != null) {
-                user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(MainActivity.this, "Account removed successfully.", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(MainActivity.this, Login.class);
-                            startActivity(intent);
-                        } else {
-                            Toast.makeText(MainActivity.this, "Failed to remove account.", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+                String userEmail = user.getEmail();
+                deleteUserAccount(userEmail);
             }
-        } else if (menuItem.getItemId() == R.id.logoutUser) {
+        }
+        else if (menuItem.getItemId() == R.id.logoutUser) {
             FirebaseAuth.getInstance().signOut();
             intent = new Intent(getApplicationContext(), Login.class);
             startActivity(intent);
@@ -189,6 +188,70 @@ public class MainActivity extends AppCompatActivity {
         }
         // Close the navigation drawer
         mDrawer.closeDrawers();
+    }
+
+
+    // Function to delete user account and associated data
+    private void deleteUserAccount(String userEmail) {
+        DatabaseReference usersRef = database.getReference("users"); // Assuming "users" is the top-level node in your database
+        Query query = usersRef.orderByChild("email").equalTo(userEmail);
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                    // Delete the user based on the snapshot key (username in your case)
+                    String usernameToDelete = userSnapshot.getKey();
+                    deleteUserData(usernameToDelete);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Handle the error
+                Log.e("Firebase", "Error querying user data", databaseError.toException());
+            }
+        });
+    }
+
+    // Function to delete user data from the Realtime Database
+    private void deleteUserData(String usernameToDelete) {
+        DatabaseReference userToDeleteRef = database.getReference("users").child(usernameToDelete);
+        userToDeleteRef.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    // User data successfully deleted
+                    Toast.makeText(MainActivity.this, "User data deleted successfully.", Toast.LENGTH_SHORT).show();
+                    // Now, delete the user account
+                    deleteUserAccount();
+                } else {
+                    // Handle the error
+                    Toast.makeText(MainActivity.this, "Failed to delete user data.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    // Function to delete the user account from Firebase Authentication
+    private void deleteUserAccount() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        // Account removed successfully
+                        Toast.makeText(MainActivity.this, "Account removed successfully.", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(MainActivity.this, Login.class);
+                        startActivity(intent);
+                    } else {
+                        // Failed to remove account
+                        Toast.makeText(MainActivity.this, "Failed to remove account.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
     }
 
     private void updatePassword(String oldPassword, String newPassword) {
