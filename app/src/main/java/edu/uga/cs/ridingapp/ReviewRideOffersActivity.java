@@ -54,6 +54,8 @@ public class ReviewRideOffersActivity extends AppCompatActivity
 //            }
 //        });
 
+
+
         // initialize the Ride Offer list
         rideOffersList = new ArrayList<RideOffer>();
 
@@ -145,38 +147,44 @@ public class ReviewRideOffersActivity extends AppCompatActivity
             // remove the deleted ride offer from the list (internal list in the App)
             rideOffersList.remove(position);
 
+            Log.d(DEBUG_TAG, "Deleted ride offer after ArrayList at: " + position + "(" + rideOffer.getDriverName() + ")");
+
             // Update the recycler view to remove the deleted ride offer from that view
             recyclerAdapter.notifyItemRemoved(position);
+
+            Log.d(DEBUG_TAG, "Deleted ride offer after RecyclerAdapter at: " + position + "(" + rideOffer.getDriverName() + ")");
 
             // Delete this ride offer in Firebase.
             // Note that we are using a specific key (one child in the list)
             DatabaseReference ref = database
                     .getReference()
-                    .child("rideoffers")
+                    .child("RideOffers")
                     .child(rideOffer.getKey());
 
-            // This listener will be invoked asynchronously, hence no need for an AsyncTask class, as in the previous apps
-            // to maintain ride offers.
-            ref.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    dataSnapshot.getRef().removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Log.d(DEBUG_TAG, "deleted ride offer at: " + position + "(" + rideOffer.getDriverName() + ")");
-                            Toast.makeText(getApplicationContext(), "Ride offer deleted for " + rideOffer.getDriverName(),
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
+            Log.d(DEBUG_TAG, "Deleted ride offer after Database Ref at: " + position + "(" + rideOffer.getDriverName() + ")");
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    Log.d(DEBUG_TAG, "failed to delete ride offer at: " + position + "(" + rideOffer.getDriverName() + ")");
-                    Toast.makeText(getApplicationContext(), "Failed to delete " + rideOffer.getDriverName(),
-                            Toast.LENGTH_SHORT).show();
-                }
-            });
+//            // This listener will be invoked asynchronously, hence no need for an AsyncTask class, as in the previous apps
+//            // to maintain ride offers.
+//            ref.addListenerForSingleValueEvent(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                    dataSnapshot.getRef().removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+//                        @Override
+//                        public void onSuccess(Void aVoid) {
+//                            Log.d(DEBUG_TAG, "deleted ride offer at: " + position + "(" + rideOffer.getDriverName() + ")");
+//                            Toast.makeText(getApplicationContext(), "Ride offer deleted for " + rideOffer.getDriverName(),
+//                                    Toast.LENGTH_SHORT).show();
+//                        }
+//                    });
+//                }
+//
+//                @Override
+//                public void onCancelled(@NonNull DatabaseError databaseError) {
+//                    Log.d(DEBUG_TAG, "failed to delete ride offer at: " + position + "(" + rideOffer.getDriverName() + ")");
+//                    Toast.makeText(getApplicationContext(), "Failed to delete " + rideOffer.getDriverName(),
+//                            Toast.LENGTH_SHORT).show();
+//                }
+//            });
         }
     }
 }

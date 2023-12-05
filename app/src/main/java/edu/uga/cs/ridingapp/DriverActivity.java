@@ -41,7 +41,7 @@ public class DriverActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             // start the user registration activity
-            Intent intent = new Intent(view.getContext(), NewRideOffer.class);
+            Intent intent = new Intent(view.getContext(), ReviewRideRequestsActivity.class);
             view.getContext().startActivity(intent);
         }
     }

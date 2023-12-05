@@ -12,7 +12,5 @@ public class RideOffers extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ride_offers);
 
-        TextView date_textView = findViewById(R.id.date_textView);
-        date_textView.setText("Hello");
     }
 }
