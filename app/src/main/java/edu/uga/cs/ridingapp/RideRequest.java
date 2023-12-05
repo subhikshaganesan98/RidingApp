@@ -7,7 +7,8 @@ public class RideRequest {
     private String date;
     private String pickup;
     private String dropoff;
-    private boolean accepted;
+    private boolean riderAccepted;
+    private boolean driverAccepted;
 
     public RideRequest() {
         this.riderName = null;
@@ -15,7 +16,8 @@ public class RideRequest {
         this.date = null;
         this.pickup = null;
         this.dropoff = null;
-        this.accepted = false;
+        this.riderAccepted = false;
+        this.driverAccepted = false;
     }
 
     public RideRequest(String riderName, String time, String date, String pickup, String dropoff) {
@@ -50,8 +52,11 @@ public class RideRequest {
         return dropoff;
     }
 
-    public boolean getAccepted() {
-        return this.accepted;
+    public boolean getRiderAccepted() {
+        return this.riderAccepted;
+    }
+    public boolean getDriverAccepted() {
+        return this.driverAccepted;
     }
 
     // setter methods
@@ -79,7 +84,10 @@ public class RideRequest {
         this.dropoff = dropoff;
     }
 
-    public void setAccepted(boolean accepted) {
-        this.accepted = accepted;
+    public void setRiderAccepted(boolean riderAccepted){
+        this.riderAccepted = riderAccepted;
+    }
+    public void setDriverAccepted(boolean driverAccepted){
+        this.driverAccepted = driverAccepted;
     }
 }

@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -40,6 +41,7 @@ public class DriverActivity extends AppCompatActivity {
     private class ViewRideRequestButtonClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
+            Log.d("Driver Activity", "View Ride Requrets button is clicked");
             // start the user registration activity
             Intent intent = new Intent(view.getContext(), ReviewRideRequestsActivity.class);
             view.getContext().startActivity(intent);
