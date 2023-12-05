@@ -22,33 +22,43 @@
             android:exported="false" />
         <activity
             android:name=".ReviewRideOffersActivity"
+            android:screenOrientation="sensor"
             android:exported="false" />
         <activity
             android:name=".ReviewRideRequestsActivity"
+            android:screenOrientation="sensor"
             android:exported="false" />
         <activity
             android:name=".NewRideRequest"
+            android:screenOrientation="sensor"
             android:exported="false" />
         <activity
             android:name=".NewRideOffer"
+            android:screenOrientation="sensor"
             android:exported="false" />
         <activity
             android:name=".RideOffers"
+            android:screenOrientation="sensor"
             android:exported="false" />
         <activity
             android:name=".UserPointsActivity"
+            android:screenOrientation="sensor"
             android:exported="false" />
         <activity
             android:name=".DriverActivity"
+            android:screenOrientation="sensor"
             android:exported="false" />
         <activity
             android:name=".RiderActivity"
+            android:screenOrientation="sensor"
             android:exported="false" />
         <activity
             android:name=".Register"
+            android:screenOrientation="sensor"
             android:exported="false" />
         <activity
             android:name=".Login"
+            android:screenOrientation="sensor"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -58,6 +68,7 @@
         </activity>
         <activity
             android:name=".MainActivity"
+            android:screenOrientation="sensor"
             android:exported="true" />
     </application>
 

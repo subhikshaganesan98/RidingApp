@@ -147,6 +147,7 @@ public class MainActivity extends AppCompatActivity {
             dialogView.findViewById(R.id.updatePasswordBtn).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    Integer differenceCount = 0;
                     String currentPassword = oPassword.getText().toString().trim();
                     String newPassword = nPassword.getText().toString().trim();
                     //validate data
@@ -156,6 +157,21 @@ public class MainActivity extends AppCompatActivity {
                     }
                     if (newPassword.length() < 5) {
                         Toast.makeText(MainActivity.this, "Password length must be minimum 5 characters", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    // Check if the new password is different from the current password by at least 3 characters
+                    if (newPassword.equals(currentPassword)) {
+                        // Show an error message or handle the case where the new password is not different enough
+                        Toast.makeText(MainActivity.this, "New password must be different from the current password.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    for (int i = 0; i < Math.min(newPassword.length(), currentPassword.length()); i++) {
+                        if (newPassword.charAt(i) != currentPassword.charAt(i)) {
+                            differenceCount++;
+                        }
+                    }
+                    if (differenceCount<3){
+                        Toast.makeText(MainActivity.this, "New password must be different from the current password by atleast 3 characters.", Toast.LENGTH_SHORT).show();
                         return;
                     }
                     updatePassword(currentPassword, newPassword);
