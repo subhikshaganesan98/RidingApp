@@ -39,6 +39,7 @@ public class EditRideOfferDialogFragment extends DialogFragment {
     public static EditRideOfferDialogFragment newInstance(int position, String driverName, String date, String time, String pickup, String dropoff) {
         EditRideOfferDialogFragment dialog = new EditRideOfferDialogFragment();
 
+        //
         Bundle args = new Bundle();
         args.putInt("position", position);
         args.putString("driverName", driverName);
