@@ -13,6 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -26,6 +28,10 @@ public class NewRideOffer extends AppCompatActivity {
     private TextView pickup;
     private TextView dropoff;
 
+    private FirebaseAuth auth;
+    private FirebaseUser user;
+    private FirebaseDatabase database;
+
     private Button saveButton;
 
     @Override
@@ -33,7 +39,11 @@ public class NewRideOffer extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_ride_offer);
 
-        driverName = findViewById(R.id.rideOfferDialog_editText1);
+
+        database = FirebaseDatabase.getInstance();
+        auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
+
         date = findViewById(R.id.editText2);
         time = findViewById(R.id.editText3);
         pickup = findViewById(R.id.editText4);
@@ -47,7 +57,8 @@ public class NewRideOffer extends AppCompatActivity {
     private class ButtonClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            String driverNameText = driverName.getText().toString();
+            Log.d(TAG, "User email: " + user.getEmail());
+            String driverNameText = user.getEmail();
             String dateText = date.getText().toString();
             String timeText = time.getText().toString();
             String pickupText = pickup.getText().toString();

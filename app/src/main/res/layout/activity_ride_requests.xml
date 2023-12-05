@@ -31,21 +31,21 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/textView4"
+                    android:id="@+id/textView40"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="Driver Name: "
+                    android:text="Rider Name: "
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/driverName_TextView"
+                    android:id="@+id/rideRequests_riderName_TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="driverName"
                     android:textSize="12sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"/>
 
             </LinearLayout>
 
@@ -64,7 +64,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/date_textView"
+                    android:id="@+id/rideRequests_date_textView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="date"
@@ -87,7 +87,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/time_TextView"
+                    android:id="@+id/rideRequests_time_TextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Time"
@@ -110,7 +110,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/pickup_textView"
+                    android:id="@+id/rideRequests_pickup_textView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Pickup"
@@ -133,7 +133,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/destination_TextView"
+                    android:id="@+id/rideRequests_destination_TextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Destination"
@@ -142,7 +142,7 @@
             </LinearLayout>
 
             <Button
-                android:id="@+id/accept_button"
+                android:id="@+id/rideRequests_accept_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Accept Ride" />

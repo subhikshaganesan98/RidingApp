@@ -118,7 +118,7 @@ public class EditRideRequestDialogFragment extends DialogFragment {
         }
     }
 
-    private class DeleteButtonClickListener implements DialogInterface.OnClickListener {
+    public class DeleteButtonClickListener implements DialogInterface.OnClickListener {
         @Override
         public void onClick(DialogInterface dialog, int which) {
             RideRequest rideRequest = new RideRequest(riderName, date, time, pickup, dropoff);

@@ -17,6 +17,8 @@ public class EditRideOfferDialogFragment extends DialogFragment {
     public static final int SAVE = 1;   // update an existing ride offer
     public static final int DELETE = 2; // delete an existing ride offer
 
+    public static final int ACCEPT = 3; // delete an existing ride offer
+
     private EditText driverNameView;
     private EditText dateView;
     private EditText timeView;
@@ -118,6 +120,7 @@ public class EditRideOfferDialogFragment extends DialogFragment {
     }
 
     private class DeleteButtonClickListener implements DialogInterface.OnClickListener {
+
         @Override
         public void onClick(DialogInterface dialog, int which) {
             RideOffer rideOffer = new RideOffer(driverName, date, time, pickup, dropoff);
@@ -125,6 +128,19 @@ public class EditRideOfferDialogFragment extends DialogFragment {
 
             EditRideOfferDialogListener listener = (EditRideOfferDialogListener) getActivity();
             listener.updateRideOffer(position, rideOffer, DELETE);
+
+            dialog.dismiss();
+        }
+    }
+
+    private class AcceptButtonClickListener implements DialogInterface.OnClickListener {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            RideOffer rideOffer = new RideOffer(driverName, date, time, pickup, dropoff);
+            rideOffer.setKey(key);
+
+            EditRideOfferDialogListener listener = (EditRideOfferDialogListener) getActivity();
+            listener.updateRideOffer(position, rideOffer, ACCEPT);
 
             dialog.dismiss();
         }
