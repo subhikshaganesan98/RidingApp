@@ -48,7 +48,7 @@ public class RiderActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             // start the user registration activity
-            Intent intent = new Intent(view.getContext(), NewRideRequest.class);
+            Intent intent = new Intent(view.getContext(), ReviewAcceptedRequestsActivity.class);
             view.getContext().startActivity(intent);
         }
     }
