@@ -23,7 +23,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class Register extends AppCompatActivity {
-    private TextInputEditText editTextEmail, editTextPassword, editTextUsername, editTextName;
+    private TextInputEditText editTextName, editTextEmail, editTextUsername, editTextPassword;
     private Button buttonReg;
     private ProgressBar progressbar;
     private FirebaseAuth mAuth;
@@ -50,13 +50,13 @@ public class Register extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
+        editTextName = findViewById(R.id.name);
         editTextEmail = findViewById(R.id.email);
+        editTextUsername = findViewById(R.id.username);
         editTextPassword = findViewById(R.id.password);
         buttonReg = findViewById(R.id.btn_register);
         progressbar = findViewById(R.id.progressBar);
         textView = findViewById(R.id.loginNow);
-        editTextUsername = findViewById(R.id.username);
-        editTextName = findViewById(R.id.name);
 
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,11 +81,11 @@ public class Register extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         reference = database.getReference("users");
 
-        String fullName, username, email, password;
-        email = String.valueOf(editTextEmail.getText());
-        password = String.valueOf(editTextPassword.getText());
-        username = String.valueOf(editTextUsername.getText());
+        String fullName, email, username, password;
         fullName = String.valueOf(editTextName.getText());
+        email = String.valueOf(editTextEmail.getText());
+        username = String.valueOf(editTextUsername.getText());
+        password = String.valueOf(editTextPassword.getText());
 
         if (TextUtils.isEmpty(email) || !isValidEmail(email)) {
             progressbar.setVisibility(View.GONE);
@@ -99,8 +99,8 @@ public class Register extends AppCompatActivity {
             return;
         }
 
-        HelperClass helperClass = new HelperClass(fullName, username, email, password);
-        reference.child(fullName).setValue(helperClass);
+        HelperClass helperClass = new HelperClass(fullName, email, username, password);
+        reference.child(username).setValue(helperClass);
 
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
