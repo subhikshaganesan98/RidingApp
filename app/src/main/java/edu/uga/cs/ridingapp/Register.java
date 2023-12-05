@@ -81,11 +81,12 @@ public class Register extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         reference = database.getReference("users");
 
-        String fullName, email, username, password;
+        String fullName, email, username, password, userPoints;
         fullName = String.valueOf(editTextName.getText());
         email = String.valueOf(editTextEmail.getText());
         username = String.valueOf(editTextUsername.getText());
         password = String.valueOf(editTextPassword.getText());
+        userPoints = "500";
 
         if (TextUtils.isEmpty(email) || !isValidEmail(email)) {
             progressbar.setVisibility(View.GONE);
@@ -99,7 +100,7 @@ public class Register extends AppCompatActivity {
             return;
         }
 
-        HelperClass helperClass = new HelperClass(fullName, email, username, password);
+        HelperClass helperClass = new HelperClass(fullName, email, username, password, userPoints);
         reference.child(username).setValue(helperClass);
 
         mAuth.createUserWithEmailAndPassword(email, password)
