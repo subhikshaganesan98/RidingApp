@@ -36,12 +36,13 @@ public class EditRideOfferDialogFragment extends DialogFragment {
         void updateRideOffer(int position, RideOffer rideOffer, int action);
     }
 
-    public static EditRideOfferDialogFragment newInstance(int position, String driverName, String date, String time, String pickup, String dropoff) {
+    public static EditRideOfferDialogFragment newInstance(int position, String key, String driverName, String date, String time, String pickup, String dropoff) {
         EditRideOfferDialogFragment dialog = new EditRideOfferDialogFragment();
 
         //
         Bundle args = new Bundle();
         args.putInt("position", position);
+        args.putString("key", key);
         args.putString("driverName", driverName);
         args.putString("date", date);
         args.putString("time", time);
@@ -56,6 +57,7 @@ public class EditRideOfferDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
+        key = getArguments().getString("key");
         position = getArguments().getInt("position");
         driverName = getArguments().getString("driverName");
         date = getArguments().getString("date");
@@ -106,6 +108,7 @@ public class EditRideOfferDialogFragment extends DialogFragment {
             String editedDropoff = dropoffView.getText().toString();
 
             RideOffer rideOffer = new RideOffer(editedDriverName, editedDate, editedTime, editedPickup, editedDropoff);
+            rideOffer.setKey(key);
 
             EditRideOfferDialogListener listener = (EditRideOfferDialogListener) getActivity();
             listener.updateRideOffer(position, rideOffer, SAVE);

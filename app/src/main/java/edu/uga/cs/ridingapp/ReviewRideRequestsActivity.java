@@ -150,12 +150,18 @@ public class ReviewRideRequestsActivity extends AppCompatActivity
             // Update the recycler view to remove the deleted ride requests from that view
             recyclerAdapter.notifyItemRemoved(position);
 
+            Log.d(DEBUG_TAG, "Deleted ride request after RecyclerAdapter at: " + position + "(" + rideRequest.getRiderName() + ")");
+
+            Log.d(DEBUG_TAG, "Deleted ride request key: " + rideRequest.getKey());
+
             // Delete this ride requests in Firebase.
             // Note that we are using a specific key (one child in the list)
             DatabaseReference ref = database
                     .getReference()
                     .child("RideRequests")
                     .child(rideRequest.getKey());
+
+            Log.d(DEBUG_TAG, "Deleted ride request after database ref of key at: " + position + "(" + rideRequest.getRiderName() + ")");
 
             // This listener will be invoked asynchronously, hence no need for an AsyncTask class, as in the previous apps
             // to maintain ride requests.

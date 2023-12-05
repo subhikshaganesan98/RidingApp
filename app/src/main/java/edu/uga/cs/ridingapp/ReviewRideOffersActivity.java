@@ -154,6 +154,7 @@ public class ReviewRideOffersActivity extends AppCompatActivity
 
             Log.d(DEBUG_TAG, "Deleted ride offer after RecyclerAdapter at: " + position + "(" + rideOffer.getDriverName() + ")");
 
+            Log.d(DEBUG_TAG, "Deleted ride offer key: " + rideOffer.getKey());
             // Delete this ride offer in Firebase.
             // Note that we are using a specific key (one child in the list)
             DatabaseReference ref = database
@@ -163,28 +164,28 @@ public class ReviewRideOffersActivity extends AppCompatActivity
 
             Log.d(DEBUG_TAG, "Deleted ride offer after Database Ref at: " + position + "(" + rideOffer.getDriverName() + ")");
 
-//            // This listener will be invoked asynchronously, hence no need for an AsyncTask class, as in the previous apps
-//            // to maintain ride offers.
-//            ref.addListenerForSingleValueEvent(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                    dataSnapshot.getRef().removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
-//                        @Override
-//                        public void onSuccess(Void aVoid) {
-//                            Log.d(DEBUG_TAG, "deleted ride offer at: " + position + "(" + rideOffer.getDriverName() + ")");
-//                            Toast.makeText(getApplicationContext(), "Ride offer deleted for " + rideOffer.getDriverName(),
-//                                    Toast.LENGTH_SHORT).show();
-//                        }
-//                    });
-//                }
-//
-//                @Override
-//                public void onCancelled(@NonNull DatabaseError databaseError) {
-//                    Log.d(DEBUG_TAG, "failed to delete ride offer at: " + position + "(" + rideOffer.getDriverName() + ")");
-//                    Toast.makeText(getApplicationContext(), "Failed to delete " + rideOffer.getDriverName(),
-//                            Toast.LENGTH_SHORT).show();
-//                }
-//            });
+            // This listener will be invoked asynchronously, hence no need for an AsyncTask class, as in the previous apps
+            // to maintain ride offers.
+            ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    dataSnapshot.getRef().removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d(DEBUG_TAG, "deleted ride offer at: " + position + "(" + rideOffer.getDriverName() + ")");
+                            Toast.makeText(getApplicationContext(), "Ride offer deleted for " + rideOffer.getDriverName(),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Log.d(DEBUG_TAG, "failed to delete ride offer at: " + position + "(" + rideOffer.getDriverName() + ")");
+                    Toast.makeText(getApplicationContext(), "Failed to delete " + rideOffer.getDriverName(),
+                            Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 }

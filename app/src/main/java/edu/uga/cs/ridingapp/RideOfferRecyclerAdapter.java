@@ -59,6 +59,7 @@ public class RideOfferRecyclerAdapter extends RecyclerView.Adapter<RideOfferRecy
 
         Log.d(DEBUG_TAG, "onBindViewHolder: " + rideOffer);
 
+        String key = rideOffer.getKey();
         String driverName = rideOffer.getDriverName();
         String date = rideOffer.getDate();
         String time = rideOffer.getTime();
@@ -81,7 +82,7 @@ public class RideOfferRecyclerAdapter extends RecyclerView.Adapter<RideOfferRecy
             @Override
             public void onClick(View v) {
                 EditRideOfferDialogFragment editRideOfferFragment =
-                        EditRideOfferDialogFragment.newInstance(holder.getAdapterPosition(), driverName, date, time, pickup, dropoff);
+                        EditRideOfferDialogFragment.newInstance(holder.getAdapterPosition(), key, driverName, date, time, pickup, dropoff);
                 editRideOfferFragment.show(((AppCompatActivity) context).getSupportFragmentManager(), null);
             }
         });

@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -24,6 +25,8 @@ public class EditRideRequestDialogFragment extends DialogFragment {
     private EditText dropoffView;
 
     int position;
+
+    String key;
     String riderName;
     String date;
     String time;
@@ -34,11 +37,12 @@ public class EditRideRequestDialogFragment extends DialogFragment {
         void updateRideRequest(int position, RideRequest rideRequest, int action);
     }
 
-    public static EditRideRequestDialogFragment newInstance(int position, String riderName, String date, String time, String pickup, String dropoff) {
+    public static EditRideRequestDialogFragment newInstance(int position, String key, String riderName, String date, String time, String pickup, String dropoff) {
         EditRideRequestDialogFragment dialog = new EditRideRequestDialogFragment();
 
         Bundle args = new Bundle();
         args.putInt("position", position);
+        args.putString("key", key);
         args.putString("riderName", riderName);
         args.putString("date", date);
         args.putString("time", time);
@@ -53,6 +57,7 @@ public class EditRideRequestDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
+        key = getArguments().getString("key");
         position = getArguments().getInt("position");
         riderName = getArguments().getString("riderName");
         date = getArguments().getString("date");
@@ -103,6 +108,8 @@ public class EditRideRequestDialogFragment extends DialogFragment {
             String editedDropoff = dropoffView.getText().toString();
 
             RideRequest rideRequest = new RideRequest(editedRiderName, editedDate, editedTime, editedPickup, editedDropoff);
+            rideRequest.setKey(key);
+            Log.d("EditRideRequest", "ride request key: " + rideRequest.getKey());
 
             EditRideRequestDialogListener listener = (EditRideRequestDialogListener) getActivity();
             listener.updateRideRequest(position, rideRequest, SAVE);
@@ -115,6 +122,7 @@ public class EditRideRequestDialogFragment extends DialogFragment {
         @Override
         public void onClick(DialogInterface dialog, int which) {
             RideRequest rideRequest = new RideRequest(riderName, date, time, pickup, dropoff);
+            rideRequest.setKey(key);
 
             EditRideRequestDialogListener listener = (EditRideRequestDialogListener) getActivity();
             listener.updateRideRequest(position, rideRequest, DELETE);
