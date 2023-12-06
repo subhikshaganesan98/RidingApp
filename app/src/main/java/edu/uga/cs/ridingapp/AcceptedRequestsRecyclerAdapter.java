@@ -92,7 +92,6 @@ public class AcceptedRequestsRecyclerAdapter extends RecyclerView.Adapter<Accept
         holder.confirmRequestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Handle confirmation logic here
                 database = FirebaseDatabase.getInstance();
                 reference = database.getReference("users");
                 FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -109,21 +108,44 @@ public class AcceptedRequestsRecyclerAdapter extends RecyclerView.Adapter<Accept
                             if (dataSnapshot.exists()) {
                                 // Loop through the results (there should be only one match)
                                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                                    // Update the userPoints to 1000
-                                    String userId = snapshot.getKey();
-                                    int existingUserPoints = snapshot.child("userPoints").getValue(Integer.class);
+                                    // Get the userPoints snapshot
+                                    DataSnapshot userPointsSnapshot = snapshot.child("userPoints");
 
-                                    // Add 50 to the existing userPoints
-                                    //int updatedUserPoints = existingUserPoints - 50;
+                                    // Check if the "userPoints" node exists
+                                    if (userPointsSnapshot.exists()) {
+                                        // Get the current userPoints value
+                                        Object rawUserPoints = userPointsSnapshot.getValue();
 
-                                    // Update the userPoints in the database
-                                    reference.child(userId).child("userPoints").setValue("2000");
+                                        // Check if rawUserPoints is not null
+                                        if (rawUserPoints != null) {
+                                            // Attempt to convert the value to Integer
+                                            try {
+                                                Integer existingUserPoints = Integer.valueOf(rawUserPoints.toString());
 
-                                    // Access the context from the adapter
-                                    if (context != null) {
-                                        Toast.makeText(context, "UserPoints are updated", Toast.LENGTH_SHORT).show();
+                                                // Add 50 to the existing userPoints
+                                                int updatedUserPoints = existingUserPoints - 50;
+
+                                                // Update the userPoints in the database
+                                                reference.child(snapshot.getKey()).child("userPoints").setValue(updatedUserPoints);
+
+                                                // Access the context from the adapter
+                                                if (context != null) {
+                                                    Toast.makeText(context, "UserPoints are updated", Toast.LENGTH_SHORT).show();
+                                                } else {
+                                                    Log.e("TAG", "Context is null");
+                                                }
+                                            } catch (NumberFormatException e) {
+                                                // Handle the case where the "userPoints" value cannot be converted to Integer
+                                                Log.e("TAG", "Error converting userPoints to Integer: " + e.getMessage());
+                                            }
+                                        } else {
+                                            // Handle the case where rawUserPoints is null
+                                            // This may happen if the "userPoints" value is missing or null in the database
+                                            Log.e("TAG", "userPoints value is missing or null in the database");
+                                        }
                                     } else {
-                                        Log.e("TAG", "Context is null");
+                                        // Handle the case where the "userPoints" node does not exist in the database
+                                        Log.e("TAG", "userPoints node does not exist in the database");
                                     }
                                 }
                             } else {
